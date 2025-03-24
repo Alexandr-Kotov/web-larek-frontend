@@ -25,7 +25,10 @@ export interface IItemsData {
 export interface IUserData {
   setUserInfo(data: TUserInfo): void;
   setUserDelivery(data: TUserDelivery): void;
-  checkUserValidation(data: Record<keyof IUser, string | number>): boolean;
+  setTelephone(telephone: number): void;
+  setMail(mail: string): void;
+  setAddress(address: string): void;
+  setPayment(payment: string): void
 }
 
 export type TItemList = Pick<IItem, 'title' | 'price'>;
@@ -33,3 +36,14 @@ export type TItemList = Pick<IItem, 'title' | 'price'>;
 export type TUserDelivery = Pick<IUser, 'address' | 'payment'>;
 
 export type TUserInfo = Pick<IUser, 'telephone' | 'mail'>;
+
+export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+
+export interface IApi {
+    baseUrl: string;
+    get<T>(uri: string): Promise<T>;
+    post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
+}
+export interface ICardsContainer {
+  catalog: HTMLElement[];
+}

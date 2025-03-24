@@ -144,7 +144,7 @@ export type TUserInfo = Pick<IUser, 'telephone' | 'mail'>;
 - `addItem(itemId: string): IItem` - добавляет одну карточку в начало массива корзины.
 - `deleteItem(itemId: string): void` - удаляет карточку из масива корзины.
 - `getItem(itemId: string): IItem` - возвращает карточку по ее id.
-- а так-же сеттеры и геттеры для сохранения и получения данных из полей класса.
+- а так-же геттер для получения данных из полей класса.
 
 #### Класс UserData
 
@@ -160,7 +160,10 @@ export type TUserInfo = Pick<IUser, 'telephone' | 'mail'>;
 Так же класс предоставляет набор методов для взаимодействия с этими данными.
 - `setUserInfo(data: TUserInfo): void` - сохраняет данные пользователя в форме информации о пользователе.
 - `setUserDelivery(data: TUserDelivery): void` - сохраняет данные пользователя в форме о способе доставки.
-- `checkUserValidation(data: Record<keyof IUser, string | number>): boolean` - проверяет объект с данными пользователя на валидность.
+- `setTelephone(telephone: number): void` - проверка на пустые значения для номера телефона.
+- `setMail(mail: string): void` - проверка на пустые значения для электронной почты.
+- `setAddress(address: string): void` - проверка на пустые значения для адреса.
+- `setPayment(payment: string): void` - проверка на пустые значения для способа оплаты.
 
 ### Слой View (представления)
 
@@ -182,7 +185,7 @@ export type TUserInfo = Pick<IUser, 'telephone' | 'mail'>;
 Предназначен для реализации модального окна с детальной информации о товаре. При открытии модального окна получает данные карточки, которое нужно показать.\
 Поля класса:
 - `_description: HTMLFormElement` - элемент разметки об описание товара.
-- `_image: HTMLFormElement` - элемент разметки изображения.
+- `_image: HTMLImageElement` - элемент разметки изображения.
 - `_title: HTMLFormElement` - элемент разметки с названием.
 - `_category: HTMLFormElement` - элемент разметки категории.
 - `_price: HTMLFormElement` -элемент разметки цена товара.
@@ -245,6 +248,8 @@ export type TUserInfo = Pick<IUser, 'telephone' | 'mail'>;
 - `userInfo:open` - открытие модального окна с формой выбора оплаты и указание доставки.
 - `userDelivery:open` - открытие модального окна с формой данных  номера телефона и почты о пользователе.
 - `card:select` - выбор товара для отображения в модальном окне.
+- `card:add` - добавление карточки в список корзины.
+- `card:delete` - удаление карточки из списка корзины.
 - `order:submit` - сохранение адреса пользователя в модальном окне.
 - `contacts:submit` - сохранение номера телефона и почты пользователя в модальном окне.
 - `order:validation` - событие, сообщающее о необходимости валидации формы адреса и выбора способа оплаты.
