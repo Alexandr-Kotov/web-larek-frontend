@@ -106,25 +106,14 @@ const itemss = [
 }
 
 
-const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog')
-const section = new CardsContainer(document.querySelector('.gallery'));
-const cardddd = new Card(cardTemplate, events);
-const cardddd1 = new Card(cardTemplate, events);
-const cardssss = [];
-cardssss.push(cardddd.render(itemss[9]));
-cardssss.push(cardddd1.render(itemss[6]));
-section.render({catalog:cardssss});
+const baseApi: IApi = new Api(API_URL, settings);
 
-// const baseApi: IApi = new Api(API_URL, settings);
+const api = new AppApi(baseApi);
 
-// const api = new AppApi(baseApi);
-
-// api.getItem("6a834fb8-350a-440c-ab55-d0e9b959b6e3")
-// .then((data)=>{
-// return data
-// }).then((item)=> {
-//     console.log(item)
-// })
+api.getItem("6a834fb8-350a-440c-ab55-d0e9b959b6e3")
+.then((item)=> {
+    console.log(item)
+})
 
 
 
@@ -135,3 +124,18 @@ section.render({catalog:cardssss});
 
 // console.log(userData.setUserInfo(userrr))
 // console.log(userData.setUserDelivery(userrr))
+
+
+
+
+
+// Выводит спсиок карточек
+
+const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog')
+const section = new CardsContainer(document.querySelector('.gallery'));
+const cards : HTMLElement[] = [];
+itemss.forEach((item)=>{
+   const card = new Card(cardTemplate, events);
+   cards.push(card.render(item));
+})
+section.render({catalog:cards}); 
