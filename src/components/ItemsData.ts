@@ -2,9 +2,10 @@ import { IItem, IItemsData } from "../types";
 import { IEvents } from "./base/events";
 
 export class ItemsData implements IItemsData {
-  protected _items: IItem[];
-  protected _preview: string | null;
+  protected _items: IItem[] = [];
+  protected _preview: string | null = null;
   protected events: IEvents;
+  protected _total: number = 0;
 
   constructor(events: IEvents) {
     this.events = events;
@@ -12,6 +13,7 @@ export class ItemsData implements IItemsData {
 
   set items(items: IItem[]) {
     this._items = items;
+    this._total = items.length;
   }
 
   get items() {
@@ -19,6 +21,10 @@ export class ItemsData implements IItemsData {
   }
   get preview() {
     return this._preview;
+  }
+
+  get total() {
+    return this._total;
   }
 
   addItem(itemId: string): IItem {

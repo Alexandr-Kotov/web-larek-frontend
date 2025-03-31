@@ -16,6 +16,7 @@ export interface IUser {
 
 export interface IItemsData {
   items: IItem[];
+  total: number;
   preview: string | null;
   addItem(itemId: string): IItem;
   deleteItem(itemId: string): void;

@@ -1,4 +1,4 @@
-import { IApi,IItem } from '../types';
+import { IApi,IItem, IItemsData } from '../types';
 
 export class AppApi {
 	private _baseApi: IApi;
@@ -7,8 +7,8 @@ export class AppApi {
 		this._baseApi = baseApi;
 	}
 
-	getItems(): Promise<IItem[]> {
-		return this._baseApi.get<IItem[]>(`/product`).then((items: IItem[]) => items);
+	getItems(): Promise<IItemsData> {
+		return this._baseApi.get<IItemsData>(`/product`).then((data: IItemsData) => data);
 	}
 
 	getItem(itemId: string): Promise<IItem> {

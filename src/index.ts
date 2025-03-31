@@ -6,7 +6,7 @@ import { CardsContainer } from './components/CardsContainer';
 import { ItemsData } from './components/ItemsData';
 import { UserData } from './components/UserData';
 import './scss/styles.scss';
-import { IApi } from './types';
+import { IApi, IItem, IItemsData } from './types';
 import { API_URL, settings } from './utils/constants';
 
 
@@ -132,10 +132,23 @@ api.getItem("6a834fb8-350a-440c-ab55-d0e9b959b6e3")
 // Выводит спсиок карточек
 
 const cardTemplate: HTMLTemplateElement = document.querySelector('#card-catalog')
-const section = new CardsContainer(document.querySelector('.gallery'));
-const cards : HTMLElement[] = [];
-itemss.forEach((item)=>{
-   const card = new Card(cardTemplate, events);
-   cards.push(card.render(item));
-})
-section.render({catalog:cards}); 
+const galleryElement = document.querySelector('.gallery') as HTMLElement;
+
+// Получаем данные с API
+api.getItems()
+  .then((data: IItemsData) => {
+    const cards: HTMLElement[] = [];  // Массив для хранения карточек
+
+    data.items.forEach((item: IItem) => {
+      const card = new Card(cardTemplate, events);  // Создание карточки
+      cards.push(card.render(item));  // Добавление карточки в массив
+    });
+
+    // Создаем контейнер карточек и рендерим их
+    const section = new CardsContainer(galleryElement);
+    section.clear();  // Очистка контейнера перед рендером
+    section.catalog = cards;  // Устанавливаем новые карточки в контейнер
+  })
+  .catch((error) => {
+    console.error("Ошибка при получении данных:", error);
+  });
