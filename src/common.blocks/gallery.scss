@@ -6,6 +6,7 @@
   @include mixins.grid(600px, 24px);
 
   &__item {
+    align-items: flex-start;
     border: none;
     border-radius: $defaultBorderRadius;
     @include mixins.selectable($secondary, 2px, $primaryLight);

@@ -15,6 +15,7 @@ export class Card {
   protected deletButton: HTMLButtonElement;
   protected preview: HTMLButtonElement;
   protected cardId: string;
+  protected cardData: Partial<IItem>
 
   constructor(template: HTMLTemplateElement, events: IEvents) {
     this.events = events;
@@ -28,6 +29,10 @@ export class Card {
     this.addButton = this.element.querySelector('.button');
     this.deletButton = this.element.querySelector('.basket__item-delete');
     this.preview = this.element.querySelector('.gallery__item');
+
+    this.element.addEventListener("click", () => {
+      this.events.emit("card:select", this.cardData);
+    });
 
     if(this.preview) {
       this.preview.addEventListener('click', () => {
@@ -50,11 +55,12 @@ export class Card {
 
   render(itemData: Partial<IItem>) {
     this.cardId = itemData.id;
+    this.cardData = itemData;
     if(this.cardDescription) this.cardDescription.textContent = itemData.description;
     if(this.cardImage) this.cardImage.src = CDN_URL + itemData.image;
     if(this.cardCategory) this.cardCategory.textContent = itemData.category;
     this.cardTitle.textContent = itemData.title;
-    this.cardPrice.textContent = itemData.price + ' ' + 'синапсов';
+    this.cardPrice.textContent = itemData.price !== null ? itemData.price + " синапсов" : "Цена не указана";
     return this.element;
   }
 
