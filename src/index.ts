@@ -1,6 +1,7 @@
 import { AppApi } from './components/AppApi';
 import { Api } from './components/base/api';
 import { EventEmitter, IEvents } from './components/base/events';
+import { Basket } from './components/Basket';
 import { Card } from './components/Card';
 import { CardsContainer } from './components/CardsContainer';
 import { DetailedInformation } from './components/DetailedInformation';
@@ -47,4 +48,12 @@ const basketButton = document.querySelector('.header__basket');
 
 basketButton.addEventListener('click', () => {
     basketModal.open();
+});
+
+const bascet = new Basket(basketModalElement, events);
+bascet.clear()
+
+events.on('card:add', (itemData: ICard) => {
+    bascet.addItem(itemData); // Добавляем товар в корзину
+    modal.close();
 });

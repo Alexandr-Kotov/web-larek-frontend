@@ -30,19 +30,8 @@ export class Card {
     this.deletButton = this.element.querySelector('.basket__item-delete');
     this.preview = this.element.querySelector('.gallery__item');
 
-    // открытие модального окна с полной информации о карточки.
     this.element.addEventListener("click", () => {
       this.events.emit("card:select", this.cardData);
-    });
-   
-    // добавление карты в корзину.
-    this.element.addEventListener('click', () => {
-      this.events.emit('card:add', this.cardData)
-    });
-    
-    // удаление карты из корзины.
-    this.element.addEventListener('click', () => {
-      this.events.emit('card:delete', this.cardData)
     });
   }
 

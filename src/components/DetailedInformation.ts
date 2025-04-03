@@ -12,6 +12,7 @@ export class DetailedInformation {
   protected events: IEvents;
   protected container: HTMLElement;
   protected id: string;
+  protected cardData: ICard;
 
   constructor(container: HTMLElement, events: IEvents) {
     this.events = events;
@@ -23,9 +24,14 @@ export class DetailedInformation {
     this.category = this.container.querySelector('.card__category');
     this.price = this.container.querySelector('.card__price');
     this.submitButton = this.container.querySelector('.button');
+
+    this.submitButton.addEventListener("click", () => {
+      this.events.emit('card:add', this.cardData);
+    });
   }
 
   update(itemData: Partial<ICard>) {
+    this.cardData = itemData as ICard;
     this.id = itemData.id;
     if (this.description) this.description.textContent = itemData.description || "Описание отсутствует";
     if (this.image) this.image.src = itemData.image ? CDN_URL + itemData.image : "";
