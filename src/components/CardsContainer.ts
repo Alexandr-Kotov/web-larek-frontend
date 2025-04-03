@@ -1,4 +1,4 @@
-import { ICardsContainer, IItem } from "../types";  // Импортируем типы
+import { ICardsContainer } from "../types";  // Импортируем типы
 
 export class CardsContainer {
   protected _catalog: HTMLElement;

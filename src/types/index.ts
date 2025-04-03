@@ -1,4 +1,4 @@
-export interface IItem {
+export interface ICard {
   id: string;
   description: string;
   image: string;
@@ -14,13 +14,13 @@ export interface IUser {
   payment: string;
 };
 
-export interface IItemsData {
-  items: IItem[];
+export interface ICardsData {
+  items: ICard[];
   total: number;
   preview: string | null;
-  addItem(itemId: string): IItem;
+  addItem(itemId: string): ICard;
   deleteItem(itemId: string): void;
-  getItem(itemId: string): IItem;
+  getItem(itemId: string): ICard;
 };
 
 export interface IUserData {
@@ -32,7 +32,7 @@ export interface IUserData {
   setPayment(payment: string): void
 }
 
-export type TItemList = Pick<IItem, 'title' | 'price'>;
+export type TCardList = Pick<ICard, 'title' | 'price'>;
 
 export type TUserDelivery = Pick<IUser, 'address' | 'payment'>;
 
@@ -45,6 +45,7 @@ export interface IApi {
     get<T>(uri: string): Promise<T>;
     post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
 }
+
 export interface ICardsContainer {
   catalog: HTMLElement[];
 }

@@ -1,8 +1,8 @@
-import { IItem, IItemsData } from "../types";
+import { ICard, ICardsData } from "../types";
 import { IEvents } from "./base/events";
 
-export class ItemsData implements IItemsData {
-  protected _items: IItem[] = [];
+export class ItemsData implements ICardsData {
+  protected _items: ICard[] = [];
   protected _preview: string | null = null;
   protected events: IEvents;
   protected _total: number = 0;
@@ -11,7 +11,7 @@ export class ItemsData implements IItemsData {
     this.events = events;
   }
 
-  set items(items: IItem[]) {
+  set items(items: ICard[]) {
     this._items = items;
     this._total = items.length;
   }
@@ -27,15 +27,15 @@ export class ItemsData implements IItemsData {
     return this._total;
   }
 
-  addItem(itemId: string): IItem {
-    return this.getItem(itemId);
+  addItem(cardId: string): ICard {
+    return this.getItem(cardId);
   }
 
-  deleteItem(itemId: string): void {
-    this._items = this._items.filter(item => item.id !== itemId);
+  deleteItem(cardId: string): void {
+    this._items = this._items.filter(item => item.id !== cardId);
   }
 
-  getItem(itemId: string): IItem {
-    return this._items.find((item) => item.id === itemId);
+  getItem(cardId: string): ICard {
+    return this._items.find((item) => item.id === cardId);
   }
 };

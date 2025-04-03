@@ -1,4 +1,4 @@
-import { IItem } from "../types";
+import { ICard } from "../types";
 import { CDN_URL } from "../utils/constants";
 import { cloneTemplate } from "../utils/utils";
 import { IEvents } from "./base/events";
@@ -15,7 +15,7 @@ export class Card {
   protected deletButton: HTMLButtonElement;
   protected preview: HTMLButtonElement;
   protected cardId: string;
-  protected cardData: Partial<IItem>
+  protected cardData: Partial<ICard>
 
   constructor(template: HTMLTemplateElement, events: IEvents) {
     this.events = events;
@@ -30,30 +30,23 @@ export class Card {
     this.deletButton = this.element.querySelector('.basket__item-delete');
     this.preview = this.element.querySelector('.gallery__item');
 
+    // открытие модального окна с полной информации о карточки.
     this.element.addEventListener("click", () => {
       this.events.emit("card:select", this.cardData);
     });
-
-    if(this.preview) {
-      this.preview.addEventListener('click', () => {
-        this.events.emit('card:select', { card: this })
-    });
-    }
    
-    if(this.addButton) {
-      this.addButton.addEventListener('click', () => {
-        this.events.emit('card:add')
+    // добавление карты в корзину.
+    this.element.addEventListener('click', () => {
+      this.events.emit('card:add', this.cardData)
     });
-    }
     
-    if(this.deletButton) {
-      this.deletButton.addEventListener('click', () => {
-        this.events.emit('card:delete')
+    // удаление карты из корзины.
+    this.element.addEventListener('click', () => {
+      this.events.emit('card:delete', this.cardData)
     });
-    }
   }
 
-  render(itemData: Partial<IItem>) {
+  render(itemData: Partial<ICard>) {
     this.cardId = itemData.id;
     this.cardData = itemData;
     if(this.cardDescription) this.cardDescription.textContent = itemData.description;

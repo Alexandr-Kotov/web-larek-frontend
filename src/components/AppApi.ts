@@ -1,4 +1,4 @@
-import { IApi,IItem, IItemsData } from '../types';
+import { IApi, ICard, ICardsData } from '../types';
 
 export class AppApi {
 	private _baseApi: IApi;
@@ -7,11 +7,11 @@ export class AppApi {
 		this._baseApi = baseApi;
 	}
 
-	getItems(): Promise<IItemsData> {
-		return this._baseApi.get<IItemsData>(`/product`).then((data: IItemsData) => data);
+	getItems(): Promise<ICardsData> {
+		return this._baseApi.get<ICardsData>(`/product`).then((data: ICardsData) => data);
 	}
 
-	getItem(itemId: string): Promise<IItem> {
-		return this._baseApi.get<IItem>(`/product/${itemId}`).then((item: IItem) => item);
+	getItem(itemId: string): Promise<ICard> {
+		return this._baseApi.get<ICard>(`/product/${itemId}`).then((item: ICard) => item);
 	}
 }

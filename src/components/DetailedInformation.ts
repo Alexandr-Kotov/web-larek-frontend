@@ -1,4 +1,4 @@
-import { IItem } from "../types";
+import { ICard } from "../types";
 import { CDN_URL } from "../utils/constants";
 import { IEvents } from "./base/events";
 
@@ -25,7 +25,7 @@ export class DetailedInformation {
     this.submitButton = this.container.querySelector('.button');
   }
 
-  update(itemData: Partial<IItem>) {
+  update(itemData: Partial<ICard>) {
     this.id = itemData.id;
     if (this.description) this.description.textContent = itemData.description || "Описание отсутствует";
     if (this.image) this.image.src = itemData.image ? CDN_URL + itemData.image : "";
