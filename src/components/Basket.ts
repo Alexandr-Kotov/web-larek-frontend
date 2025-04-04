@@ -33,6 +33,11 @@ export class Basket {
     if (this.items.find(existingItem => existingItem.id === item.id)) {
       return; // Если товар уже есть, ничего не делаем
     }
+
+
+    if (this.items.find(existingItem => existingItem.id === item.id)) {
+      return; // Если товар уже есть, ничего не делаем
+    }
     this.items.push(item); // Добавляем товар в массив корзины
     this.renderItem(item);
     this.updateBasketCounter();  // Отображаем товар в списке корзины
@@ -89,8 +94,12 @@ export class Basket {
 
   // Обновление общей суммы корзины
   updateTotalPrice() {
-    const total = this.items.reduce((sum, item) => sum + item.price, 0);
+    const total = this.totalPrice();
     this.totalPriceElement.textContent = `${total} синапсов`;
+  }
+
+  totalPrice(){
+    return  this.items.reduce((sum, item) => sum + item.price, 0);
   }
 
   updateOrderButtonState() {
@@ -107,5 +116,6 @@ export class Basket {
     this.items = [];
     this.updateTotalPrice();
     this.updateOrderButtonState();
+    this.updateBasketCounter()
   }
 }

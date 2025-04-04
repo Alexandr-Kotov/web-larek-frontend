@@ -3,11 +3,11 @@ import { CDN_URL } from "../utils/constants";
 import { IEvents } from "./base/events";
 
 export class DetailedInformation {
-  private description: HTMLElement;
-  private image: HTMLImageElement;
-  private title: HTMLElement;
-  private category: HTMLElement;
-  private price: HTMLElement;
+  protected description: HTMLElement;
+  protected image: HTMLImageElement;
+  protected title: HTMLElement;
+  protected category: HTMLElement;
+  protected price: HTMLElement;
   protected submitButton: HTMLButtonElement;
   protected events: IEvents;
   protected container: HTMLElement;
@@ -24,8 +24,12 @@ export class DetailedInformation {
     this.category = this.container.querySelector('.card__category');
     this.price = this.container.querySelector('.card__price');
     this.submitButton = this.container.querySelector('.button');
-
+    
     this.submitButton.addEventListener("click", () => {
+      if (!this.cardData) {
+        console.error("Ошибка: cardData не определено перед отправкой в событие.");
+        return; // Не выполняем эмиттинг события, если нет данных
+      }
       this.events.emit('card:add', this.cardData);
     });
   }
