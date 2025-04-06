@@ -39,7 +39,7 @@ export type TUserDelivery = Pick<IUser, 'address' | 'payment'>;
 
 export type TUserInfo = Pick<IUser, 'phone' | 'email'>;
 
-export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type ApiPostMethods = 'POST';
 
 export interface IApi {
 	baseUrl: string;

@@ -10,26 +10,19 @@ import { BasketPresenter } from './components/BasketPresenter';
 import { DetailedInformation } from './components/DetailedInformation';
 import { FormPresenter } from './components/FormPresenter';
 import { Form } from './components/Form';
-
-const orderButton = document.querySelector("#basket-order-button") as HTMLButtonElement;
-const baseApi: IApi = new Api(API_URL, settings);
-const api = new AppApi(baseApi);
-
-// Модальное окно для карточек
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import { ItemsData } from './components/ItemsData';
 import { CardsPresenter } from './components/CardsPresenter';
 import { ContactForm } from './components/ContactForm';
 import { ContactFormPresenter } from './components/ContactFormPresenter';
 import { SuccessfullyPresenter } from './components/SuccessfullyPresenter';
-import { Successfully } from './components/Successfully';
 import { UserData } from './components/UserData';
+
+const orderButton = document.querySelector("#basket-order-button") as HTMLButtonElement;
+const baseApi: IApi = new Api(API_URL, settings);
+const api = new AppApi(baseApi);
 const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const galleryElement = document.querySelector('.gallery') as HTMLElement;
 const orderFormSubmitButton = document.querySelector('#form__next-button') as HTMLButtonElement;
-
 
 // ===== Модальные окна =====
 const basketModalElement = document.querySelector('#modal-bascet') as HTMLElement;
@@ -59,12 +52,8 @@ new BasketPresenter(basket, events,itemsData, basketModal, modalCard);
 const detailedInfo = new DetailedInformation(modalElement.querySelector('.modal__content'), events, basket, itemsData);
 const cardsPresenter = new CardsPresenter(itemsData, cardTemplate, galleryElement, events, modalCard, detailedInfo, basket);
 
-
-
 new FormPresenter(orderForm, orderModal, events, orderButton, basketModal, userData);
-
 const contactFormPresenter = new ContactFormPresenter(contactForm, contactModal, events, userData);
-
 contactFormPresenter.attachOpenHandler(orderFormSubmitButton, orderModal);
 
 // ===== Получение данных =====
@@ -73,8 +62,6 @@ api.getItems().then((data) => {
   itemsData.items = data.items;
   cardsPresenter.displayItems();
 });
-
-
 
 const modalSuccessdully = document.querySelector("#modal-successfully") as HTMLElement;
 const successfullyModal = new Modal(modalSuccessdully, events);
