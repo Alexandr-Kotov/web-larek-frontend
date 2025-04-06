@@ -1,52 +1,34 @@
-import { IUserData, TUserDelivery, TUserInfo } from "../types";
-import { IEvents } from "./base/events";
+import { IUser, IUserData, TUserDelivery, TUserInfo } from '../types';
+import { IEvents } from './base/events';
 
 export class UserData implements IUserData {
-  protected telephone: number;
-  protected mail: string;
-  protected address: string;
-  protected payment: string;
-  protected events: IEvents;
+	protected phone: string;
+	protected email: string;
+	protected address: string;
+	protected payment: string;
+	protected events: IEvents;
 
-  constructor(events: IEvents) {
-    this.events = events;
-  }
+	constructor(events: IEvents) {
+		this.events = events;
+	}
 
-  setUserInfo(data: TUserInfo): void {
-    this.telephone = data.telephone;
-    this.mail = data.mail;
-  }
+	getUserData(): IUser {
+		return {
+			payment: this.payment,
+			address: this.address,
+			email: this.email,
+			phone: this.phone,
+		};
+	}
 
-  setUserDelivery(data: TUserDelivery): void {
-    this.payment = data.payment;
-    this.address = data.address;
-  }
+	setUserInfo(data: TUserInfo): void {
+		this.phone = data.phone;
+		this.email = data.email;
+		console.log('Setting user info:', data);
+	}
 
-  setTelephone(telephone: number): void {
-    if (!telephone) {
-      throw new Error('Телефонный номер не может быть пустым или равным нулю.');
-    }
-    this.telephone = telephone;
-  }
-
-  setMail(mail: string): void {
-    if (!mail) {
-      throw new Error('Email не может быть пустым.');
-    }
-    this.mail = mail;
-  }
-
-  setAddress(address: string): void {
-    if (!address) {
-      throw new Error('Адрес не может быть пустым.');
-    }
-    this.address = address;
-  }
-
-  setPayment(payment: string): void {
-    if (!payment) {
-      throw new Error('Способ оплаты не может быть не выбраным.');
-    }
-    this.payment = payment;
-  }
-};
+	setUserDelivery(data: TUserDelivery): void {
+		this.payment = data.payment;
+		this.address = data.address;
+	}
+}

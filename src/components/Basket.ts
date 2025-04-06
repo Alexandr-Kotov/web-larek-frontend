@@ -1,121 +1,106 @@
-import { ICard } from "../types";
-import { cloneTemplate } from "../utils/utils";
-import { IEvents } from "./base/events";
+import { ICard, ICardsData } from '../types';
+import { cloneTemplate } from '../utils/utils';
+import { IEvents } from './base/events';
 
 export class Basket {
-  protected container: HTMLElement;
-  protected itemsList: HTMLElement;
-  protected totalPriceElement: HTMLElement;
-  protected template: HTMLTemplateElement;
-  protected events: IEvents;
-  protected orderButton: HTMLButtonElement;
-  protected items: ICard[];
-  protected basketCounter: HTMLElement;
+	protected container: HTMLElement;
+	protected itemsList: HTMLElement;
+	protected totalPriceElement: HTMLElement;
+	protected template: HTMLTemplateElement;
+	protected events: IEvents;
+	protected orderButton: HTMLButtonElement;
+	protected basketCounter: HTMLElement;
+	protected itemsData: ICardsData;
 
-  constructor(container: HTMLElement, events: IEvents) {
-    this.container = container;
-    this.itemsList = this.container.querySelector(".basket__list");
-    this.totalPriceElement = this.container.querySelector(".basket__price");
-    this.template = document.querySelector("#card-basket") as HTMLTemplateElement;
-    this.orderButton = this.container.querySelector("#basket-order-button") as HTMLButtonElement;
-    this.basketCounter = document.querySelector('.header__basket-counter') as HTMLElement;
-    this.events = events;
-    this.items = [];
+	constructor(container: HTMLElement, events: IEvents, itemsData: ICardsData) {
+		this.container = container;
+		this.events = events;
+		this.itemsData = itemsData;
 
-    // Если корзина пуста, показываем 0 синапсов
-    if (this.items.length === 0) {
-      this.totalPriceElement.textContent = "0 синапсов";
-    }
-  }
+		this.itemsList = this.container.querySelector('.basket__list');
+		this.totalPriceElement = this.container.querySelector('.basket__price');
+		this.template = document.querySelector(
+			'#card-basket'
+		) as HTMLTemplateElement;
+		this.orderButton = this.container.querySelector(
+			'#basket-order-button'
+		) as HTMLButtonElement;
+		this.basketCounter = document.querySelector(
+			'.header__basket-counter'
+		) as HTMLElement;
 
-  // Добавление товара в корзину
-  addItem(item: ICard) {
-    if (this.items.find(existingItem => existingItem.id === item.id)) {
-      return; // Если товар уже есть, ничего не делаем
-    }
+		this.renderAllItems();
+		this.updateTotalPrice();
+		this.updateOrderButtonState();
+		this.updateBasketCounter();
+	}
 
+	addItemToBasket(item: ICard): void {
+		if (!this.itemsData.isInBasket(item.id)) {
+			this.itemsData.addToBasket(item);
+			this.renderAllItems();
+			this.updateTotalPrice();
+			this.updateBasketCounter();
+			this.updateOrderButtonState();
+		}
+	}
 
-    if (this.items.find(existingItem => existingItem.id === item.id)) {
-      return; // Если товар уже есть, ничего не делаем
-    }
-    this.items.push(item); // Добавляем товар в массив корзины
-    this.renderItem(item);
-    this.updateBasketCounter();  // Отображаем товар в списке корзины
-    this.updateTotalPrice(); // Обновляем общую сумму
-  }
+	renderItem(item: ICard) {
+		const listItem = cloneTemplate(this.template) as HTMLElement;
 
-  renderItem(item: ICard) {
-    const listItem = cloneTemplate(this.template) as HTMLElement;
-    // Наполнение карточки товара
-    listItem.querySelector('.card__title').textContent = item.title;
-    listItem.querySelector('.card__price').textContent = `${item.price} синапсов`;
-  
-    // Присвоение индекса товара
-    const indexElement = listItem.querySelector('.basket__item-index') as HTMLElement;
-    indexElement.textContent = (this.itemsList.children.length + 1).toString(); // Индекс в корзине
-  
-    // Поиск кнопки удаления и назначение обработчика
-    const deleteButton = listItem.querySelector('.basket__item-delete') as HTMLButtonElement;
-    deleteButton.addEventListener("click", () => this.removeItem(item.id));  // Обработчик удаления товара
-  
-    // Добавление элемента в корзину
-    this.itemsList.appendChild(listItem);
-    this.updateOrderButtonState();
-  }
+		listItem.querySelector('.card__title').textContent = item.title;
+		listItem.querySelector(
+			'.card__price'
+		).textContent = item.price !== null
+    ? item.price + ' синапсов'
+    : 'Цена не указана';
 
-  // Удаление товара из корзины
-  removeItem(itemId: string) {
-    // Находим элемент в корзине и удаляем его
-    const itemIndex = this.items.findIndex(item => item.id === itemId);
-    if (itemIndex !== -1) {
-      this.items.splice(itemIndex, 1); // Удаляем товар из массива
+		const indexElement = listItem.querySelector(
+			'.basket__item-index'
+		) as HTMLElement;
+		indexElement.textContent = (this.itemsList.children.length + 1).toString();
 
-      // Перерисовываем всю корзину
-      this.renderAllItems();
+		const deleteButton = listItem.querySelector(
+			'.basket__item-delete'
+		) as HTMLButtonElement;
+		deleteButton.addEventListener('click', () => {
+			this.itemsData.removeFromBasket(item.id);
+			this.renderAllItems();
+			this.updateTotalPrice();
+			this.updateBasketCounter();
+			this.updateOrderButtonState();
+		});
 
-      // Обновляем общую сумму
-      this.updateTotalPrice();
-      this.updateBasketCounter();
-      this.updateOrderButtonState();
-    }
-  }
+		this.itemsList.appendChild(listItem);
+	}
 
-  // Рендеринг всех товаров в корзине
-  renderAllItems() {
-    this.itemsList.innerHTML = ''; // Очищаем список
-    this.items.forEach(item => this.renderItem(item)); // Рендерим все товары заново
-  }
+	renderAllItems() {
+		this.itemsList.innerHTML = '';
+		const basketItems = this.itemsData.getBasketItems();
+		basketItems.forEach((item) => this.renderItem(item));
+	}
 
-  updateBasketCounter() {
-    if (this.basketCounter) {
-      this.basketCounter.textContent = this.items.length.toString(); // Обновляем счетчик товаров
-    }
-  }
+	updateTotalPrice() {
+		const total = this.itemsData.getBasketTotal();
+		this.totalPriceElement.textContent = `${total} синапсов`;
+		return total;
+	}
 
-  // Обновление общей суммы корзины
-  updateTotalPrice() {
-    const total = this.totalPrice();
-    this.totalPriceElement.textContent = `${total} синапсов`;
-  }
+	updateBasketCounter() {
+		const count = this.itemsData.getBasketItems().length;
+		this.basketCounter.textContent = count.toString();
+	}
 
-  totalPrice(){
-    return  this.items.reduce((sum, item) => sum + item.price, 0);
-  }
+	updateOrderButtonState() {
+		const total = this.itemsData.getBasketTotal();
+	  this.orderButton.disabled = total <= 0;
+	}
 
-  updateOrderButtonState() {
-    if (this.items.length === 0) {
-      this.orderButton.disabled = true;  // Если корзина пуста, кнопка заблокирована
-    } else {
-      this.orderButton.disabled = false; // Если товары есть, кнопка активна
-    }
-  }
-
-  // Очистка корзины
-  clear() {
-    this.itemsList.innerHTML = "";
-    this.items = [];
-    this.updateTotalPrice();
-    this.updateOrderButtonState();
-    this.updateBasketCounter()
-  }
+	clear() {
+		this.itemsData.clearBasket();
+		this.renderAllItems();
+		this.updateTotalPrice();
+		this.updateBasketCounter();
+		this.updateOrderButtonState();
+	}
 }

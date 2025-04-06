@@ -8,10 +8,25 @@ export class AppApi {
 	}
 
 	getItems(): Promise<ICardsData> {
-		return this._baseApi.get<ICardsData>(`/product`).then((data: ICardsData) => data);
+		return this._baseApi
+			.get<ICardsData>(`/product`)
+			.then((data: ICardsData) => data);
 	}
 
 	getItem(itemId: string): Promise<ICard> {
-		return this._baseApi.get<ICard>(`/product/${itemId}`).then((item: ICard) => item);
+		return this._baseApi
+			.get<ICard>(`/product/${itemId}`)
+			.then((item: ICard) => item);
+	}
+
+	postOrder(data: {
+		total: number;
+		payment: string;
+		email: string;
+		phone: string;
+		address: string;
+		items: string[];
+	}): Promise<{ success: boolean }> {
+		return this._baseApi.post<{ success: boolean }>(`/order`, data, 'POST');
 	}
 }

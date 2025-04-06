@@ -133,3 +133,6 @@ export function createElement<
     }
     return element;
 }
+
+import { EventEmitter } from "../components/base/events";
+export const events = new EventEmitter();

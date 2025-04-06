@@ -1,54 +1,46 @@
-import { ICard } from "../types";
-import { CDN_URL } from "../utils/constants";
-import { cloneTemplate } from "../utils/utils";
-import { IEvents } from "./base/events";
+import { ICard } from '../types';
+import { CDN_URL } from '../utils/constants';
+import { cloneTemplate } from '../utils/utils';
 
 export class Card {
-  protected element: HTMLElement;
-  protected events: IEvents;
-  protected cardId: string;
-  protected cardData: Partial<ICard>;
-  protected template: HTMLTemplateElement;
+	protected cardData: Partial<ICard> = {};
+	protected cardId = '';
+	protected element: HTMLElement;
+	protected template: HTMLTemplateElement;
 
-  constructor(template: HTMLTemplateElement, events: IEvents) {
-    this.template = template;
-    this.events = events;
-  }
+	constructor(template: HTMLTemplateElement) {
+		this.template = template;
+	}
 
-  render(itemData: Partial<ICard>) {
-    this.cardData = itemData;
-    this.cardId = itemData.id;
+	render(itemData: Partial<ICard>) {
+		this.cardData = itemData;
+		this.cardId = itemData.id || '';
+		this.element = cloneTemplate(this.template);
 
-    // Клонируем шаблон
-    this.element = cloneTemplate(this.template);
+		this.fillCardData(itemData);
 
-    // Ищем элементы уже в клоне
-    const cardCategory = this.element.querySelector('.card__category');
-    const cardDescription = this.element.querySelector('.card__text');
-    const cardImage = this.element.querySelector('.card__image') as HTMLImageElement;
-    const cardPrice = this.element.querySelector('.card__price');
-    const cardTitle = this.element.querySelector('.card__title');
+		return this.element;
+	}
 
-    // Заполняем данные карточки
-    if (cardDescription) cardDescription.textContent = itemData.description || '';
-    if (cardImage) cardImage.src = CDN_URL + itemData.image;
-    if (cardCategory) cardCategory.textContent = itemData.category;
-    if (cardTitle) cardTitle.textContent = itemData.title;
-    if (cardPrice) {
-      cardPrice.textContent = itemData.price !== null && itemData.price !== undefined
-        ? `${itemData.price} синапсов`
-        : "Цена не указана";
-    }
+	private fillCardData(itemData: Partial<ICard>) {
+		const cardCategory = this.element.querySelector('.card__category');
+		const cardDescription = this.element.querySelector('.card__text');
+		const cardImage = this.element.querySelector(
+			'.card__image'
+		) as HTMLImageElement;
+		const cardPrice = this.element.querySelector('.card__price');
+		const cardTitle = this.element.querySelector('.card__title');
 
-    // Навешиваем событие на саму карточку
-    this.element.addEventListener("click", () => {
-      this.events.emit("card:select", this.cardData);
-    });
-
-    return this.element;
-  }
-
-  get id() {
-    return this.cardId;
-  }
+		if (cardDescription)
+			cardDescription.textContent = itemData.description || '';
+		if (cardImage) cardImage.src = CDN_URL + itemData.image;
+		if (cardCategory) cardCategory.textContent = itemData.category;
+		if (cardTitle) cardTitle.textContent = itemData.title;
+		if (cardPrice) {
+			cardPrice.textContent =
+				itemData.price !== null && itemData.price !== undefined
+					? `${itemData.price} синапсов`
+					: 'Цена не указана';
+		}
+	}
 }
