@@ -60,14 +60,13 @@ export class SuccessfullyPresenter {
 			.then((response) => {
 				console.log('Заказ успешно отправлен:', response);
 				this.basket.clear();
+				this.view.update(total);
+				this.modal.open();
+				this.itemsData.clearBasket();
 			})
 			.catch((error) => {
 				console.error('Ошибка при отправке заказа:', error);
 			});
-
-		this.view.update(total);
-		this.modal.open();
-		this.itemsData.clearBasket();
 	}
 
 	protected handleClose(): void {
