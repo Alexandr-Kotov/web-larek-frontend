@@ -24,7 +24,6 @@ export class UserData implements IUserData {
 	setUserInfo(data: TUserInfo): void {
 		this.phone = data.phone;
 		this.email = data.email;
-		console.log('Setting user info:', data);
 	}
 
 	setUserDelivery(data: TUserDelivery): void {

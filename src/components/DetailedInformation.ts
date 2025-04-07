@@ -39,10 +39,8 @@ export class DetailedInformation {
 		this.submitButton.addEventListener('click', () => {
 			if (this.itemsData.isInBasket(this.cardData.id)) {
 				this.events.emit('card:remove', this.cardData);
-				console.log('Товар удален из корзины:', this.cardData);
 			} else {
 				this.events.emit('card:add', this.cardData);
-				console.log('Товар добавлен в корзину:', this.cardData);
 			}
 		});
 	}

@@ -4,6 +4,7 @@ import { Successfully } from './Successfully';
 import { ItemsData } from './ItemsData';
 import { AppApi } from './AppApi';
 import { UserData } from './UserData';
+import { Basket } from './Basket';
 
 export class SuccessfullyPresenter {
 	protected view: Successfully;
@@ -13,6 +14,7 @@ export class SuccessfullyPresenter {
 	protected closeButton: HTMLButtonElement;
 	protected api: AppApi;
 	protected userData: UserData;
+	protected basket: Basket;
 
 	constructor(
 		successModalElement: HTMLElement,
@@ -20,7 +22,8 @@ export class SuccessfullyPresenter {
 		events: IEvents,
 		itemsData: ItemsData,
 		api: AppApi,
-		userData: UserData
+		userData: UserData,
+		basket: Basket
 	) {
 		this.view = new Successfully(successModalElement);
 		this.modal = modal;
@@ -28,6 +31,7 @@ export class SuccessfullyPresenter {
 		this.itemsData = itemsData;
 		this.api = api;
 		this.userData = userData;
+		this.basket = basket;
 
 		this.closeButton = successModalElement.querySelector(
 			'.order-success__close'
@@ -55,6 +59,7 @@ export class SuccessfullyPresenter {
 			.postOrder({ total, payment, email, phone, address, items })
 			.then((response) => {
 				console.log('Заказ успешно отправлен:', response);
+				this.basket.clear();
 			})
 			.catch((error) => {
 				console.error('Ошибка при отправке заказа:', error);

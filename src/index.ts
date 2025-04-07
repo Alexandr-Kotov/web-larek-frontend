@@ -65,7 +65,7 @@ api.getItems().then((data) => {
 
 const modalSuccessdully = document.querySelector("#modal-successfully") as HTMLElement;
 const successfullyModal = new Modal(modalSuccessdully, events);
-const successfullyPresenter = new SuccessfullyPresenter(modalSuccessdully, successfullyModal, events, itemsData, api, userData);
+const successfullyPresenter = new SuccessfullyPresenter(modalSuccessdully, successfullyModal, events, itemsData, api, userData, basket);
 
 // Кнопка оплаты и контактная модалка
 const payButton = document.querySelector('#pay-button') as HTMLButtonElement;
